@@ -99,7 +99,7 @@
         const response = await fetch("/.netlify/functions/subscribe", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: email, name: firstName })
+          body: JSON.stringify({ email: email, first_name: firstName })
         });
 
         const data = await response.json();
