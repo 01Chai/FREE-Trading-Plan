@@ -89,34 +89,34 @@
 
   <!-- Submission Script -->
   <script>
-    document.getElementById("subscription-form").addEventListener("submit", async function (e) {
-      e.preventDefault();
+document.getElementById("subscribe-form").addEventListener("submit", async function(e) {
+  e.preventDefault();
 
-      const firstName = document.getElementById("firstName").value;
-      const email = document.getElementById("email").value;
+  const first_name = document.getElementById("firstName").value.trim();
+  const email = document.getElementById("email").value.trim();
 
-      try {
-        const response = await fetch("/.netlify/functions/subscribe", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: email, first_name: firstName })
-        });
+  if (!first_name || !email) {
+    alert("Please enter both your first name and email.");
+    return;
+  }
 
-        const data = await response.json();
+  const response = await fetch("/.netlify/functions/subscribe", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      email: email,
+      first_name: first_name
+    })
+  });
 
-        if (response.ok) {
-          // Redirect to thank you page
-          //window.location.href = "https://news.atifhussainofficial.com/thankyou";
-        } else {
-          document.getElementById("form-error-message").innerText =
-            "Error: " + (data.error || "Something went wrong. Try again.");
-          document.getElementById("form-error-message").style.display = "block";
-        }
-      } catch (err) {
-        document.getElementById("form-error-message").innerText = "Network error. Please try again.";
-        document.getElementById("form-error-message").style.display = "block";
-      }
-    });
-  </script>
+  const data = await response.json();
+
+  if (data.success) {
+    //window.location.href = "https://news.atifhussainofficial.com/thankyou";
+  } else {
+    alert("There was an error: " + (data.error || "Please try again."));
+  }
+});
+</script>
 </body>
 </html>
