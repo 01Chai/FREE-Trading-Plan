@@ -3,7 +3,6 @@ exports.handler = async (event) => {
     // Parse data from the frontend
     const { email, first_name } = JSON.parse(event.body);
 
-    // Validate input
     if (!first_name || !email) {
       return {
         statusCode: 400,
@@ -11,11 +10,11 @@ exports.handler = async (event) => {
       };
     }
 
-    // Get secrets from environment variables
+    // Use your environment variables
     const API_KEY = process.env.BEEHIIV_API_KEY;
     const PUBLICATION_ID = process.env.BEEHIIV_PUBLICATION_ID;
 
-    // Send to Beehiiv API
+    // Make request to Beehiiv API
     const response = await fetch(
       `https://api.beehiiv.com/v2/publications/${PUBLICATION_ID}/subscriptions`,
       {
@@ -46,7 +45,6 @@ exports.handler = async (event) => {
         body: JSON.stringify({ success: false, error: data })
       };
     }
-
   } catch (error) {
     return {
       statusCode: 500,
