@@ -24,8 +24,9 @@ exports.handler = async (event) => {
           "Authorization": `Bearer ${API_KEY}`
         },
         body: JSON.stringify({
-          email,
-          custom_fields: { "First Name": first_name }
+          email: email,
+          custom_fields: [
+            { name: "First Name", value: first_name }]
         })
       }
     );
