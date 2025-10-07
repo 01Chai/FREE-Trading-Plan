@@ -89,33 +89,52 @@
 
   <!-- Submission Script -->
   <script>
-document.getElementById("subscribe-form").addEventListener("submit", async function(e) {
-  e.preventDefault();
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("subscription-form");
+  const errorMsg = document.getElementById("form-error-message");
 
-  const first_name = document.getElementById("first_name").value.trim();
-  const email = document.getElementById("email").value.trim();
-
-  if (!first_name || !email) {
-    alert("Please enter both your first name and email.");
+  if (!form) {
+    console.error("Form element not found!");
     return;
   }
 
-  const response = await fetch("/.netlify/functions/subscribe", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      email: email,
-      first_name: first_name
-    })
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const email = document.getElementById("email").value.trim();
+    const first_name = document.getElementById("first_name").value.trim();
+
+    if (!email || !first_name) {
+      errorMsg.textContent = "Please enter both your first name and email.";
+      http://errorMsg.style.display = "block";
+      return;
+    }
+
+    try {
+      const response = await fetch("/.netlify/functions/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, first_name })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        http://errorMsg.style.display = "none";
+        //alert("Subscription successful! 🎉");
+        // optional: redirect if you want
+        // window.location.href = "https://news.atifhussainofficial.com/thankyou";
+      } else {
+        console.error("Server error:", data);
+        errorMsg.textContent = "Something went wrong. Please try again.";
+        http://errorMsg.style.display = "block";
+      }
+    } catch (error) {
+      console.error("Network error:", error);
+      errorMsg.textContent = "Network error. Please try again.";
+      http://errorMsg.style.display = "block";
+    }
   });
-
-  const data = await response.json();
-
-  if (data.success) {
-    //window.location.href = "https://news.atifhussainofficial.com/thankyou";
-  } else {
-    alert("There was an error: " + (data.error || "Please try again."));
-  }
 });
 </script>
 </body>
