@@ -8,7 +8,7 @@
     body {
       margin: 0;
       padding: 0;
-      font-family: PT Serif, serif;
+      font-family: "PT Serif", serif;
       background: #fff;
       display: flex;
       justify-content: center;
@@ -51,8 +51,8 @@
       border: 1px solid #2D1F1A;
       border-radius: 4px;
       font-size: 14px;
-      text-align: center;
-      box-sizing: border-box; /* ✅ fixes right overlap */
+      text-align: left;
+      box-sizing: border-box;
     }
 
     button {
@@ -71,11 +71,9 @@
 </head>
 <body>
   <div class="container">
-    <!-- Header -->
     <h2>Get Your FREE Trading Model</h2>
     <p>Enter your details below to receive your free trading model</p>
 
-    <!-- Signup Form -->
     <form id="subscription-form">
       <input type="text" id="first_name" placeholder="First Name" required>
       <input type="email" id="email" placeholder="Enter your email" required>
@@ -89,54 +87,48 @@
 
   <!-- Submission Script -->
   <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("subscription-form");
-  const errorMsg = document.getElementById("form-error-message");
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("subscription-form");
+    const errorMsg = document.getElementById("form-error-message");
 
-  if (!form) {
-    console.error("Form element not found!");
-    return;
-  }
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
 
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      const first_name = document.getElementById("first_name").value.trim();
 
-    const email = document.getElementById("email").value.trim();
-    const first_name = document.getElementById("first_name").value.trim();
+      if (!email || !first_name) {
+        errorMsg.textContent = "Please enter both your first name and email.";
+        http://errorMsg.style.display = "block";
+        return;
+      }
 
-    if (!email || !first_name) {
-      errorMsg.textContent = "Please enter both your first name and email.";
-      http://errorMsg.style.display = "block";
-      return;
-    }
+      try {
+        const response = await fetch("/.netlify/functions/subscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, first_name })
+        });
 
-    try {
-      const response = await fetch("/.netlify/functions/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, first_name })
-      });
+        const data = await response.json();
 
-      const data = await response.json();
-
-      if (response.ok) {
-        http://errorMsg.style.display = "none";
-        //alert("Subscription successful! 🎉");
-        // optional: redirect if you want
-        // window.location.href = "https://news.atifhussainofficial.com/thankyou";
-        } 
-        else {
-        console.error("Server error:", data);
-        errorMsg.textContent = "Something went wrong. Please try again.";
+        if (response.ok) {
+          http://errorMsg.style.display = "none";
+          alert("Done! 🎉");
+          // Uncomment below if you want a redirect
+          // window.location.href = "https://news.atifhussainofficial.com/thankyou";
+        } else {
+          console.error("Server error:", data);
+          errorMsg.textContent = "Something went wrong. Please try again.";
+          http://errorMsg.style.display = "block";
+        }
+      } catch (error) {
+        console.error("Network error:", error);
+        errorMsg.textContent = "Network error. Please try again.";
         http://errorMsg.style.display = "block";
       }
-    } catch (error) {
-      console.error("Network error:", error);
-      errorMsg.textContent = "Network error. Please try again.";
-      http://errorMsg.style.display = "block";
-    }
+    });
   });
-});
-</script>
+  </script>
 </body>
 </html>
