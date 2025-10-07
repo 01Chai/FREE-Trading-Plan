@@ -100,11 +100,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("subscription-form");
   const errorMsg = document.getElementById("form-error-message");
 
-  if (!form) {
-    console.error("Form element not found!");
-    return;
-  }
-
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -113,33 +108,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!email || !first_name) {
       errorMsg.textContent = "Please enter both your first name and email.";
-      http://errorMsg.style.display = "block";
+      errorMsg.style.display = "block";
       return;
     }
 
     try {
       const response = await fetch("https://free-trading-plan.netlify.app/.netlify/functions/subscribe", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, first_name })
-      });
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email: email, first_name: first_name }) // ✅ Properly formatted payload
+      }); 
 
-      const data = await response.json();
+      const data = await response.json(); 
 
       if (response.ok) {
-        http://errorMsg.style.display = "none";
-        alert("Done! 🎉");
-        // Optional redirect:
-        // window.location.href = "https://your-thankyou-page.com";} 
-        //else {
+        errorMsg.style.display = "none";
+        alert("Subscription successful!");
+      } else {
         console.error("Server error:", data);
         errorMsg.textContent = "Something went wrong. Please try again.";
-        http://errorMsg.style.display = "block";
+        errorMsg.style.display = "block";
       }
     } catch (error) {
       console.error("Network error:", error);
       errorMsg.textContent = "Network error. Please try again.";
-      http://errorMsg.style.display = "block";
+      errorMsg.style.display = "block";
     }
   });
 });
