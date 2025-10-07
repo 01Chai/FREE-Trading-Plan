@@ -56,11 +56,20 @@
     }
 
     button {
-      background: #2D1F1A;
-      color: #fff;
-      cursor: pointer;
-      font-size: 16px;
-    }
+  background: #2D1F1A;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  display: flex;              /* ✅ ensures centering */
+  justify-content: center;    /* ✅ horizontal center */
+  align-items: center;        /* ✅ vertical center */
+  text-align: center;         /* ✅ makes text stay centered */
+  box-sizing: border-box;
+}
 
     #form-error-message {
       display: none;
